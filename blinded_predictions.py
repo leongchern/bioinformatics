@@ -11,13 +11,10 @@
 """
 import itertools
 import numpy as np
-import pandas as pd
 import sklearn.cross_validation
 from sklearn.linear_model import LogisticRegressionCV
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
-from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix, roc_auc_score
 from collections import OrderedDict as od
