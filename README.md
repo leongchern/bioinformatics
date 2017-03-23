@@ -1,10 +1,15 @@
 # UCL COMPGI10 - Bioinformatics
-Accompanying code for the COMPGI10 Bioinformatics project undertaken at University College London
+Accompanying code for the COMPGI10 Bioinformatics project undertaken at University College London.
+
 The script can be run directly from console.
 
 
 ## Output of the python script
 Produces the sequence, protein locations and accompanying probabilities for each entry in the blinded set
+
+
+## Python modules required
+numpy, collections, itertools, sklearn
 
 
 ## Functions used
