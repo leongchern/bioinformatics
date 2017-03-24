@@ -118,22 +118,85 @@ with open('../blind.fasta') as fp:
 #         for _, seq in read_fasta(fp):
 #             analysis_seq.append(seq)
 #             c += 1
+#
+#         print('\n\n==============================')
+#         print(loc)
+#         print('==============================')
 #         print('no. of sequences: ', c)
+#         analysis_len_vec = [len(i) for i in analysis_seq]
+#         print(np.histogram(analysis_len_vec, bins))
+#         print('mean', np.average(analysis_len_vec))
+#         print('median', np.median(analysis_len_vec))
+#         print('stdev', np.std(analysis_len_vec))
+#         # info in the under 1000
+#         analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
+#         hist_info = np.histogram(analysis_len_vec2, bins2)
+#         print(hist_info)
+#         print('mean', np.average(analysis_len_vec2))
+#         print('median', np.median(analysis_len_vec2))
+#         print('stdev', np.std(analysis_len_vec2))
 #
-#     print('\n\n==============================')
-#     print(loc)
-#     print('==============================')
-#     analysis_len_vec = [len(i) for i in analysis_seq]
-#     print(np.histogram(analysis_len_vec, bins))
-#     print('mean', np.average(analysis_len_vec))
-#     print('median', np.median(analysis_len_vec))
-#     print('stdev', np.std(analysis_len_vec))
 #
-#     analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
-#     print(np.histogram(analysis_len_vec2, bins2))
-#     print('mean', np.average(analysis_len_vec2))
-#     print('median', np.median(analysis_len_vec2))
-#     print('stdev', np.std(analysis_len_vec2))
+# fig = plt.figure()
+#
+# analysis_seq = []
+# with open('../cyto.fasta') as fp:
+#     for _, seq in read_fasta(fp):
+#         analysis_seq.append(seq)
+# analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
+# hist_info = np.histogram(analysis_len_vec2, bins2)
+# a = hist_info[0]
+# b = hist_info[1]
+# ax = fig.add_subplot(221)
+# ax.set_title('Cytosolic')
+# sn.barplot(b[:-1],a,palette="Blues_d")
+#
+#
+# analysis_seq = []
+# with open('../mito.fasta') as fp:
+#     for _, seq in read_fasta(fp):
+#         analysis_seq.append(seq)
+# analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
+# hist_info = np.histogram(analysis_len_vec2, bins2)
+# a = hist_info[0]
+# b = hist_info[1]
+# ax = fig.add_subplot(222)
+# ax.set_title('Mito')
+# sn.barplot(b[:-1],a,palette="Blues_d")
+#
+#
+# analysis_seq = []
+# with open('../nucleus.fasta') as fp:
+#     for _, seq in read_fasta(fp):
+#         analysis_seq.append(seq)
+# analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
+# hist_info = np.histogram(analysis_len_vec2, bins2)
+# a = hist_info[0]
+# b = hist_info[1]
+# ax = fig.add_subplot(223)
+# ax.set_title('Nuclear')
+# sn.barplot(b[:-1],a,palette="Blues_d")
+#
+# analysis_seq = []
+# with open('../secreted.fasta') as fp:
+#     for _, seq in read_fasta(fp):
+#         analysis_seq.append(seq)
+# analysis_len_vec2 = [len(i) for i in analysis_seq if len(i) < 1000]
+# hist_info = np.histogram(analysis_len_vec2, bins2)
+# a = hist_info[0]
+# b = hist_info[1]
+# ax = fig.add_subplot(224)
+# ax.set_title('Secreted')
+# sn.barplot(b[:-1],a,palette="Blues_d")
+#
+# for ax in fig.get_axes():
+#     ax.set_xlabel("Bins")
+#     ax.set_ylabel("Frequency")
+#
+# plt.suptitle('Sequence lengths for sequences under 1000 characters')
+# plt.subplots_adjust(hspace=0.5, wspace=0.3)
+# plt.savefig('char_dist')
+# plt.close('all')
 
 
 
@@ -448,7 +511,7 @@ yhat_rf = rf.predict(test_x)
 
 
 # ===============================
-# voting classifer ensemble - 2 Classifiers (FINAL MODEL)
+# voting classifer ensemble (VCE) - 2 Classifiers (FINAL MODEL)
 # ===============================
 
 voting_ensemble2 = VotingClassifier(estimators=[
@@ -456,6 +519,24 @@ voting_ensemble2 = VotingClassifier(estimators=[
 voting_ensemble2 = voting_ensemble2.fit(train_x, train_y)
 yhat_ve2 = voting_ensemble2.predict(test_x)
 
+#
+# ve2_trainset = voting_ensemble2.predict(train_x)
+# # print statistics
+# metrics.accuracy_score(train_y, ve2_trainset)
+# print_statistics(train_y, ve2_trainset)
+#
+# confusion = confusion_matrix(train_y, ve2_trainset)
+# plt.figure()
+# sn.heatmap(confusion, annot=True, fmt='d', linewidths=.5,
+#            xticklabels=['cyto', 'mito','nucleus','secreted'],
+#            yticklabels=['cyto', 'mito','nucleus','secreted'])
+# plt.title('Predicting Protein Locations using Voting Classifier Ensemble (Train set)')
+# plt.savefig('cm_VE2_trainset.png')
+# plt.close('all')
+
+# ====================================
+# VCE performance on train set
+# ====================================
 # # print statistics
 # metrics.accuracy_score(test_y, yhat_ve2)
 # print_statistics(test_y, yhat_ve2)
@@ -465,7 +546,7 @@ yhat_ve2 = voting_ensemble2.predict(test_x)
 # sn.heatmap(confusion, annot=True, fmt='d', linewidths=.5,
 #            xticklabels=['cyto', 'mito','nucleus','secreted'],
 #            yticklabels=['cyto', 'mito','nucleus','secreted'])
-# plt.title('Predicting Protein Locations using Voting Classifier Ensemble')
+# plt.title('Predicting Protein Locations using Voting Classifier Ensemble (Test set)')
 # plt.savefig('cm_VE2.png')
 # plt.close('all')
 
