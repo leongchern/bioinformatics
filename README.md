@@ -20,4 +20,5 @@ print_statistics:
 This function takes as inputs both the ground truth labels as well as the predicted labels. It then outputs the macro/micro/weight versions of the precision, recall and F1 metrics between the 2 sequences.
 
 
-
+## Instructions for use
+Place the FASTA sequence files in the root folder, and the python script in the 'code' folder. Run the python script from the code folder.
